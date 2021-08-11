@@ -1,0 +1,59 @@
+proposerNum: 3
+
+# Path of node_exporter
+nodeExporter: third-party/node_exporter/node_exporter
+
+# Monitor config
+monitor:
+  addr: 127.0.0.0
+  prometheus: third-party/prometheus/prometheus
+  prometheusYml: third-party/prometheus/prometheus.yml
+  prometheusPort: 8020
+
+  grafanaServer: third-party/grafana/bin/grafana-server
+  grafanaIni: third-party/grafana/conf/grafana.ini
+  grafanaPort: 8501
+
+# Xchain nodes config
+xchain:
+  node1:
+    addr: 127.0.0.1
+    rpcPort: 37111
+    p2pPort: 47101
+    metricPort: 8201
+    exportPort: 8010
+    isProposer: true
+
+    userName: hello
+    password: 123456
+    privateKey: ca/id_rsa_xbench
+    srcPath: node/node1
+    dstPath: /home/xbench/node1ForXbench/
+
+  node2:
+    addr: 127.0.0.2
+    rpcPort: 37112
+    p2pPort: 47102
+    metricPort: 8202
+    exportPort: 8010
+    isProposer: true
+
+    userName: hello
+    password: 123456
+    privateKey: ca/id_rsa_xbench
+    srcPath: node/node2
+    dstPath: /home/xbench/node2ForXbench/
+
+  node3:
+    addr: 127.0.0.3
+    rpcPort: 37113
+    p2pPort: 47103
+    metricPort: 8203
+    exportPort: 8010
+    isProposer: true
+
+    userName: hello
+    password: 123456
+    privateKey: ca/id_rsa_xbench
+    srcPath: node/node3
+    dstPath: /home/xbench/node3ForXbench/
