@@ -23,9 +23,9 @@ func main() {
 	var c auto.Conf
 
 	// Get config from yaml
-	c.GetConf("conf.yaml")
+	c.GetConf("auto/conf.yaml")
 
-	clear_build(c)
+	//clear_build(c)
 
 	auto_deploy(c)
 
