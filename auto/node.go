@@ -50,7 +50,6 @@ func (n *Node) RunCmd(cmd string) {
 	session.Stdout = os.Stdout
 	session.Stderr = os.Stderr
 	session.Run(cmd)
-	fmt.Printf("\n")
 }
 
 // Run command on Xchain node without result
@@ -62,6 +61,7 @@ func (n *Node) RunCmdNoResult(cmd string) {
 
 	session.Start(cmd)
 	fmt.Printf("Waiting for command: (%v) to finish...\n", cmd)
+
 	/*
 		err = session.Wait()
 		if err != nil {

@@ -81,6 +81,12 @@ func clear_build(c auto.Conf) {
 
 		//node.RunCmd(cmd)
 		node.RunCmd("kill -9 `" + cmd + "`")
+
+		// Kill the process related to node.DstPath
+		cmd = "ps -aux| grep \"" + "web.listen-address=:" + strconv.Itoa(node.ExportPort) + "\" | grep -v \"grep\" | awk '{print $2}'"
+
+		//node.RunCmd(cmd)
+		node.RunCmd("kill -9 `" + cmd + "`")
 		fmt.Printf("All the processes realted to %s are killed! \n", node.DstPath)
 
 		// Delete the node file on server

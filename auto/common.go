@@ -72,7 +72,7 @@ func (c *Conf) getXchainNet() {
 		// Get metric & exportor ip:port (to be used in promethus config)
 		Net.NodesMetrics = append(Net.NodesMetrics, node.Addr+":"+strconv.Itoa(node.MetricPort))
 		Net.NodesExporters = append(Net.NodesExporters, node.Addr+":"+strconv.Itoa(node.ExportPort))
-		Net.NodesExporters = append(Net.NodesRpcs, node.Addr+":"+strconv.Itoa(node.RpcPort))
+		Net.NodesRpcs = append(Net.NodesRpcs, node.Addr+":"+strconv.Itoa(node.RpcPort))
 	}
 	err := checkPorposerNum(c)
 	checkErr(err)
