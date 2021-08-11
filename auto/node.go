@@ -3,7 +3,6 @@ package auto
 import (
 	"fmt"
 	"os"
-	"time"
 
 	"github.com/pkg/sftp"
 )
@@ -63,12 +62,13 @@ func (n *Node) RunCmdNoResult(cmd string) {
 
 	session.Start(cmd)
 	fmt.Printf("Waiting for command: (%v) to finish...\n", cmd)
-
-	err = session.Wait()
-	if err != nil {
-		fmt.Printf("%v: Command finished with error: %v\n", time.Now(), err)
-	}
-	fmt.Printf("Success!\n")
+	/*
+		err = session.Wait()
+		if err != nil {
+			fmt.Printf("%v: Command finished with error: %v\n", time.Now(), err)
+		}
+		fmt.Printf("Success!\n")
+	*/
 }
 
 // Override the nodes due to the config

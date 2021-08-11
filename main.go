@@ -24,13 +24,13 @@ func main() {
 
 	// Get config from yaml
 	c.GetConf("auto/conf.yaml")
-	fmt.Println(auto.Net)
-	//clear_build(c)
+
+	clear_build(c)
 
 	auto_deploy(c)
 
-	//start_promethus(c)
-	//start_grafana(c)
+	start_promethus(c)
+	start_grafana(c)
 
 }
 
