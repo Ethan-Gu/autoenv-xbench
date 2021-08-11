@@ -24,7 +24,7 @@ func main() {
 
 	// Get config from yaml
 	c.GetConf("auto/conf.yaml")
-
+	fmt.Println(auto.Net)
 	//clear_build(c)
 
 	auto_deploy(c)
@@ -103,8 +103,8 @@ func start_grafana(c auto.Conf) {
 
 	// Grafana config && start
 	c.GrafanaConfig()
-	cmd1 := "cd " + path.Dir(path.Dir(c.Monitor.Grafana))
-	cmd2 := "nohup ./" + path.Join(path.Base(path.Dir(c.Monitor.Grafana)), path.Base(c.Monitor.Grafana)) + " --config " + path.Join(path.Base(path.Dir(c.Monitor.GrafanaIni)), path.Base(c.Monitor.GrafanaIni)) + " >/dev/null 2>&1 &"
+	cmd1 := "cd " + path.Dir(path.Dir(c.Monitor.GrafanaServer))
+	cmd2 := "nohup ./" + path.Join(path.Base(path.Dir(c.Monitor.GrafanaServer)), path.Base(c.Monitor.GrafanaServer)) + " --config " + path.Join(path.Base(path.Dir(c.Monitor.GrafanaIni)), path.Base(c.Monitor.GrafanaIni)) + " >/dev/null 2>&1 &"
 	auto.ExecCommandNoResult(cmd1 + " && " + cmd2)
 
 }

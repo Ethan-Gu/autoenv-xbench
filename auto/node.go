@@ -16,9 +16,9 @@ type MonitorNode struct {
 	PrometheusYml  string `yaml:"prometheusYml,omitempty"`
 	PrometheusPort int    `yaml:"prometheusPort,omitempty"`
 
-	Grafana     string `yaml:"grafana,omitempty"`
-	GrafanaIni  string `yaml:"grafanaIni,omitempty"`
-	GrafanaPort int    `yaml:"grafanaPort,omitempty"`
+	GrafanaServer string `yaml:"grafanaServer,omitempty"`
+	GrafanaIni    string `yaml:"grafanaIni,omitempty"`
+	GrafanaPort   int    `yaml:"grafanaPort,omitempty"`
 }
 
 // Xchain node config
