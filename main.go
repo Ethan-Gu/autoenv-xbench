@@ -25,11 +25,16 @@ func main() {
 	// Get config from yaml
 	c.GetConf("auto/conf.yaml")
 
-	clear_build(c)
+	// Kill the process build last time
+	//clear_build(c)
 
+	// Modify nodes, transfer nodes file, start xchain && node_exporter
 	auto_deploy(c)
 
+	// Modify promethus && start
 	start_promethus(c)
+
+	// Modify grafana && start
 	start_grafana(c)
 
 }
@@ -43,8 +48,8 @@ func auto_deploy(c auto.Conf) {
 		node.OverrideConfig()
 
 		// Define the log-in method (password / privateKey)
-		node.AuthMethod = "password"
-		//node.AuthMethod = "privateKey"
+		//node.AuthMethod = "password"
+		node.AuthMethod = "privateKey"
 
 		// Transfer the node to the corresponding server
 		node.Transfer(node.SrcPath, node.DstPath)
@@ -62,11 +67,12 @@ func auto_deploy(c auto.Conf) {
 		node.RunCmdNoResult("cd " + node.DstPath + " && nohup ./" + path.Base(c.NodeExporter) + " --web.listen-address=:" + strconv.Itoa(node.ExportPort) + " >/dev/null 2>&1 &")
 
 	}
-	// Show the xchain status
+	// Wait 10s and show the xchain status
 	time.Sleep(time.Second * 10)
 
 	x := c.Xchain["node1"]
-	x.AuthMethod = "password"
+	//x.AuthMethod = "password"
+	x.AuthMethod = "privateKey"
 	x.RunCmd("cd " + x.DstPath + " && ./bin/xchain-cli status -H " + x.Addr + ":" + strconv.Itoa(x.RpcPort))
 }
 
@@ -74,7 +80,8 @@ func clear_build(c auto.Conf) {
 
 	for _, node := range c.Xchain {
 
-		node.AuthMethod = "password"
+		//node.AuthMethod = "password"
+		node.AuthMethod = "privateKey"
 
 		// Kill the process related to node.DstPath
 		cmd := "ps -aux| grep \"" + path.Base(node.DstPath) + "\" | grep -v \"grep\" | awk '{print $2}'"

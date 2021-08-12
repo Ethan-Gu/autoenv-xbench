@@ -75,7 +75,7 @@ func sftpconnect(n *Node) (*sftp.Client, error) {
 		err          error
 	)
 	// Get auth method
-	if n.AuthMethod == "key" {
+	if n.AuthMethod == "privateKey" {
 		auth = make([]ssh.AuthMethod, 0)
 		auth = append(auth, publicKeyAuthFunc(n.PrivateKey))
 	} else if n.AuthMethod == "password" {
