@@ -28,7 +28,6 @@ type Node struct {
 	MetricPort int    `yaml:"metricPort,omitempty"`
 	ExportPort int    `yaml:"exportPort,omitempty"`
 
-	SrcPath    string `yaml:"srcPath,omitempty"`
 	UserName   string `yaml:"userName,omitempty"`
 	PrivateKey string `yaml:"privateKey,omitempty"`
 	DstPath    string `yaml:"dstPath,omitempty"`
@@ -36,6 +35,7 @@ type Node struct {
 	IsProposer bool   `yaml:"isProposer,omitempty"`
 
 	AuthMethod string
+	SrcPath    string
 }
 
 // Run command on Xchain node

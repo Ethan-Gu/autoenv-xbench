@@ -26,7 +26,7 @@ func main() {
 	c.GetConf("auto/conf.yaml")
 
 	// Kill the process build last time
-	//clear_build(c)
+	clear_build(c)
 
 	// Modify nodes, transfer nodes file, start xchain && node_exporter
 	auto_deploy(c)
@@ -42,7 +42,7 @@ func main() {
 func auto_deploy(c auto.Conf) {
 
 	// Modify and transfer nodes to servers
-	for _, node := range c.Xchain {
+	for name, node := range c.Xchain {
 
 		// Override the config of node, like ip & port, neturl, etc
 		node.OverrideConfig()
@@ -52,7 +52,7 @@ func auto_deploy(c auto.Conf) {
 		node.AuthMethod = "privateKey"
 
 		// Transfer the node to the corresponding server
-		node.Transfer(node.SrcPath, node.DstPath)
+		node.Transfer(path.Join(c.NodeSrc, name), node.DstPath)
 
 		/*
 			Transfer the node_exporter (if needed), you may also declare other paths to place

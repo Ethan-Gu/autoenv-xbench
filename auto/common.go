@@ -27,9 +27,11 @@ type Network struct {
 }
 
 type Conf struct {
+	NodeNum      int             `yaml:"nodeNum,omitempty"`
+	ProposerNum  int             `yaml:"proposerNum,omitempty"`
+	NodeSrc      string          `yaml:"nodeSrc,omitempty"`
 	Monitor      MonitorNode     `yaml:"monitor,omitempty"`
 	Xchain       map[string]Node `yaml:"xchain,omitempty"`
-	ProposerNum  int             `yaml:"proposerNum,omitempty"`
 	NodeExporter string          `yaml:"nodeExporter"`
 }
 
@@ -42,25 +44,42 @@ func (c *Conf) GetConf(confFile string) {
 	err = yaml.Unmarshal(yamlFile, c)
 	checkErr(err)
 
-	// Set value to Net
-	c.getXchainNet()
-
+	// Prepare nodes from the output of xchain
+	c.PrepareNodes()
 }
 
-func (c *Conf) getXchainNet() {
-	// Look for proposers, set value to Net
-	for _, node := range c.Xchain {
-		// The netURL prefix
-		s := "/ip4/" + node.Addr + "/tcp/" + strconv.Itoa(node.P2pPort) + "/p2p/"
+func (c *Conf) PrepareNodes() {
+	Net.ProposerNum = 0
 
+	// Copy the node source to xbenchnet
+	ExecCommand("cd " + path.Dir(c.NodeSrc) + " && rm -rf xbenchnet" + " && mkdir xbenchnet" + " && cp -r output xbenchnet/output")
+
+	for name, node := range c.Xchain {
+
+		// Set the source path for each node
+		node.SrcPath = path.Join(path.Join(path.Dir(c.NodeSrc), "xbenchnet"), name)
+
+		// Generate new node address and netURL for each node
+		ExecCommand("cd " + path.Dir(node.SrcPath) + " && cp -r output " + node.SrcPath)
+		ExecCommand("cd " + node.SrcPath + " && ./bin/xchain-cli account newkeys --output data/keys -f")
+		ExecCommand("cd " + node.SrcPath + " && ./bin/xchain-cli netURL gen")
+
+		// If node is proposer, record the address & netURL in global variable Net
 		if node.IsProposer {
-			Net.ProposerNum += 1
-			Net.ProposerURLs = append(Net.ProposerURLs, s)
 
-			// Set ProposerURLs values from the last proposer node read
-			if Net.ProposerNum == c.ProposerNum {
-				node.getProposerURLs(node.SrcPath + "/conf/network.yaml")
-			}
+			// Count proposers number
+			Net.ProposerNum += 1
+			// The netURL prefix
+			s := "/ip4/" + node.Addr + "/tcp/" + strconv.Itoa(node.P2pPort) + "/p2p/"
+
+			result := ExecCommand("cd " + node.SrcPath + " && ./bin/xchain-cli netURL preview")
+			x := strings.Split(result, "/")
+
+			// Get net key from netURL
+			url := x[len(x)-1]
+
+			// Generate new netURL(remove the "\n" & add prefix) and add it to Net
+			Net.ProposerURLs = append(Net.ProposerURLs, s+url[:len(url)-1])
 
 			// Get keys/address from file (to set miners in xuper.json)
 			addr, err := ioutil.ReadFile(path.Join(node.SrcPath, "data/keys/address"))
@@ -73,29 +92,13 @@ func (c *Conf) getXchainNet() {
 		Net.NodesMetrics = append(Net.NodesMetrics, node.Addr+":"+strconv.Itoa(node.MetricPort))
 		Net.NodesExporters = append(Net.NodesExporters, node.Addr+":"+strconv.Itoa(node.ExportPort))
 		Net.NodesRpcs = append(Net.NodesRpcs, node.Addr+":"+strconv.Itoa(node.RpcPort))
+
+		// Save the modification to config c
+		c.Xchain[name] = node
 	}
-	err := checkPorposerNum(c)
-	checkErr(err)
-}
+	// Check if the proposer number count equal to proposerNum set in the yaml file
+	c.checkPorposerNum()
 
-// Modify network.yaml
-func (n *Node) getProposerURLs(path string) {
-	data, err := ioutil.ReadFile(path)
-	checkErr(err)
-
-	m := make(map[interface{}]interface{})
-	err = yaml.Unmarshal(data, &m)
-	checkErr(err)
-
-	// Update the Net.NodesURLs
-	l := m["bootNodes"]
-	s := fmt.Sprintf("%v", l)
-	s = s[1 : len(s)-1]
-	args := strings.Split(s, " ")
-	for i, netURL := range args {
-		x := strings.Split(netURL, "/")
-		Net.ProposerURLs[i] = Net.ProposerURLs[i] + x[len(x)-1]
-	}
 }
 
 // Check error function
@@ -106,7 +109,7 @@ func checkErr(err error) {
 }
 
 // Check if the number of proposer and proposerNum set is consist
-func checkPorposerNum(c *Conf) error {
+func (c *Conf) checkPorposerNum() error {
 	if Net.ProposerNum != c.ProposerNum {
 		return errors.New("the number of Proposer nodes != proposerNum set")
 	}
