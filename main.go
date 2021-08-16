@@ -42,7 +42,7 @@ func main() {
 func auto_deploy(c auto.Conf) {
 
 	// Modify and transfer nodes to servers
-	for name, node := range c.Xchain {
+	for _, node := range c.Xchain {
 
 		// Override the config of node, like ip & port, neturl, etc
 		node.OverrideConfig()
@@ -52,7 +52,7 @@ func auto_deploy(c auto.Conf) {
 		node.AuthMethod = "privateKey"
 
 		// Transfer the node to the corresponding server
-		node.Transfer(path.Join(c.NodeSrc, name), node.DstPath)
+		node.Transfer(node.SrcPath, node.DstPath)
 
 		/*
 			Transfer the node_exporter (if needed), you may also declare other paths to place
