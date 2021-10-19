@@ -6,11 +6,11 @@
 3. The number of nodes is not limited
 4. Clear & Rebuild
 ### Requirements:
-1. xuperchain
-2. prometheus
-3. grafana
+1. Xuperchain
+2. Prometheus
+3. Grafana
 #### For nodes' machines:
-1. gcc version >= 4.8 (required by wasm2c module of xuperchain)
+1. Consistent `gcc` version on xuperchain compiler and nodes' machines
 
 ## Quick Start
 1. Modify `user/conf.yaml`, including monitor host, xchain nodes, config of prometheus and grafana
