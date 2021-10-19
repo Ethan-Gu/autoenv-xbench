@@ -33,7 +33,7 @@ xchain:
     userName: hello
     password: 123456
     # if use privateKey, declare where it is (relative path)
-    privateKey: user/ca/id_rsa_xbench
+    privateKey: user/ca/id_rsa
     # where to put xchain node on destinate machine
     dstPath: /home/xchain/node1ForXchain/
 
@@ -47,7 +47,7 @@ xchain:
 
     userName: hello
     password: 123456
-    privateKey: ca/id_rsa_xbench
+    privateKey: user/ca/id_rsa
     dstPath: /home/xchain/node2ForXchain/
 
   node3:
@@ -59,7 +59,7 @@ xchain:
 
     userName: hello
     password: 123456
-    privateKey: ca/id_rsa_xbench
+    privateKey: user/ca/id_rsa
     dstPath: /home/xchain/node3ForXchain/
 
   node4:
@@ -71,6 +71,6 @@ xchain:
 
     userName: hello
     password: 123456
-    privateKey: ca/id_rsa_xbench
+    privateKey: user/ca/id_rsa
     dstPath: /home/xchain/node4ForXchain/
 
