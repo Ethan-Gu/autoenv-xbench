@@ -23,10 +23,10 @@ func main() {
 	var c auto.Conf
 
 	// Get config from yaml
-	c.GetConf("auto/conf.yaml")
+	c.GetConf("user/conf.yaml")
 
-	// Kill the process build last time
-	clear_build(c)
+	// Kill the process built by c last time（
+	//clear_build(c)
 
 	// Modify nodes, transfer nodes file, start xchain && node_exporter
 	auto_deploy(c)
@@ -60,9 +60,6 @@ func auto_deploy(c auto.Conf) {
 		*/
 		node.Transfer(c.NodeExporter, node.DstPath)
 
-		// Create chain and start the xchain network
-		node.RunCmd("cd " + node.DstPath + " && sh control.sh start")
-
 		// Start node_exporter
 		node.RunCmdNoResult("cd " + node.DstPath + " && nohup ./" + path.Base(c.NodeExporter) + " --web.listen-address=:" + strconv.Itoa(node.ExportPort) + " >/dev/null 2>&1 &")
 
@@ -84,13 +81,13 @@ func clear_build(c auto.Conf) {
 		node.AuthMethod = "privateKey"
 
 		// Kill the process related to node.DstPath
-		cmd := "ps -aux| grep \"" + path.Base(node.DstPath) + "\" | grep -v \"grep\" | awk '{print $2}'"
+		cmd := "ps aux| grep \"" + node.DstPath + "\" | grep -v \"grep\" | awk '{print $2}'"
 
 		//node.RunCmd(cmd)
 		node.RunCmd("kill -9 `" + cmd + "`")
 
-		// Kill the process related to node.DstPath
-		cmd = "ps -aux| grep \"" + "web.listen-address=:" + strconv.Itoa(node.ExportPort) + "\" | grep -v \"grep\" | awk '{print $2}'"
+		// Kill the process related to node.DstPath(node_exporter)
+		cmd = "ps aux| grep \"" + "web.listen-address=:" + strconv.Itoa(node.ExportPort) + "\" | grep -v \"grep\" | awk '{print $2}'"
 
 		//node.RunCmd(cmd)
 		node.RunCmd("kill -9 `" + cmd + "`")

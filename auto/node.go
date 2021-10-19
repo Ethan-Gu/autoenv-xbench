@@ -9,30 +9,32 @@ import (
 
 // Monitor node config
 type MonitorNode struct {
-	Addr string `yaml:"addr,omitempty"`
+	Addr string `yaml:"addr"`
 
-	Prometheus     string `yaml:"prometheus,omitempty"`
-	PrometheusYml  string `yaml:"prometheusYml,omitempty"`
-	PrometheusPort int    `yaml:"prometheusPort,omitempty"`
+	Prometheus     string `yaml:"prometheus"`
+	PrometheusYml  string `yaml:"prometheusYml"`
+	PrometheusPort int    `yaml:"prometheusPort"`
 
-	GrafanaServer string `yaml:"grafanaServer,omitempty"`
-	GrafanaIni    string `yaml:"grafanaIni,omitempty"`
-	GrafanaPort   int    `yaml:"grafanaPort,omitempty"`
+	GrafanaServer string `yaml:"grafanaServer"`
+	GrafanaIni    string `yaml:"grafanaIni"`
+	GrafanaPort   int    `yaml:"grafanaPort"`
 }
 
 // Xchain node config
 type Node struct {
-	Addr       string `yaml:"addr,omitempty"`
-	RpcPort    int    `yaml:"rpcPort,omitempty"`
-	P2pPort    int    `yaml:"p2pPort,omitempty"`
-	MetricPort int    `yaml:"metricPort,omitempty"`
-	ExportPort int    `yaml:"exportPort,omitempty"`
+	Addr       string `yaml:"addr"`
+	RpcPort    int    `yaml:"rpcPort"`
+	P2pPort    int    `yaml:"p2pPort"`
+	MetricPort int    `yaml:"metricPort"`
+	ExportPort int    `yaml:"exportPort"`
 
-	UserName   string `yaml:"userName,omitempty"`
+	UserName   string `yaml:"userName"`
 	PrivateKey string `yaml:"privateKey,omitempty"`
-	DstPath    string `yaml:"dstPath,omitempty"`
+	DstPath    string `yaml:"dstPath"`
 	Password   string `yaml:"password,omitempty"`
 	IsProposer bool   `yaml:"isProposer,omitempty"`
+
+	IsPredistribution bool `yaml:"isPredistribution,omitempty"`
 
 	AuthMethod string
 	SrcPath    string
@@ -90,6 +92,7 @@ func (n *Node) OverrideConfig() {
 	xposPath := n.SrcPath + "/data/genesis/xpos.json"
 	n.xposConfig(xposPath)
 
+	
 	// Rename xpos.json as xuper.json && save the old xuper.json as single.json
 	err := os.Rename(n.SrcPath+"/data/genesis/xuper.json", n.SrcPath+"/data/genesis/single.json")
 	checkErr(err)

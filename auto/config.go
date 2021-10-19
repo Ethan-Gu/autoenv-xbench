@@ -69,7 +69,7 @@ func (n *Node) networkConfig(path string) {
 	// Make your own change to file here
 	m["port"] = n.P2pPort
 	m["address"] = "/ip4/" + n.Addr + "/tcp/" + strconv.Itoa(n.P2pPort)
-	m["bootNodes"] = Net.ProposerURLs
+	m["bootNodes"] = Net.NodesURLs
 
 	data, err = yaml.Marshal(&m)
 	checkErr(err)
@@ -97,6 +97,18 @@ func (n *Node) xposConfig(path string) {
 	config["init_proposer_neturl"] = map[string][]string{
 		"1": Net.ProposerURLs,
 	}
+
+	predistribution := []map[string]string{}
+
+	for _, ad := range Net.PredistributionAddrs {
+		p := map[string]string{
+			"address": ad,
+			"quota":   "100000000000000000000",
+		}
+		predistribution = append(predistribution, p)
+	}
+
+	m["predistribution"] = predistribution
 
 	data, err = json.MarshalIndent(&m, "", "\t")
 	checkErr(err)
