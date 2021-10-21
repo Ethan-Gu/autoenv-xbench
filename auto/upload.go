@@ -40,7 +40,8 @@ func uploadDirectory(sftpClient *sftp.Client, localPath string, remotePath strin
 	localFiles, err := ioutil.ReadDir(localPath)
 	checkErr(err)
 
-	sftpClient.Mkdir(remotePath)
+	//sftpClient.Mkdir(remotePath)
+	sftpClient.MkdirAll(remotePath)
 
 	for _, backupDir := range localFiles {
 		localFilePath := path.Join(localPath, backupDir.Name())

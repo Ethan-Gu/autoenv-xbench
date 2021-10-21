@@ -54,6 +54,9 @@ func auto_deploy(c auto.Conf) {
 		// Transfer the node to the corresponding server
 		node.Transfer(node.SrcPath, node.DstPath)
 
+		// Start Xuperchain node
+		node.RunCmd("cd " + node.DstPath + " && sh control.sh start")
+
 		/*
 			Transfer the node_exporter (if needed), you may also declare other paths to place
 			node_exporter, and use that path instead of node.DstPath to start node_exporter

@@ -63,7 +63,7 @@ func (c *Conf) PrepareNodes() {
 		c.Xchain[name] = node
 
 		// Generate new node address and netURL for each node
-		ExecCommand("cd " + path.Dir(node.SrcPath) + " && cp -r output " + node.SrcPath)
+		ExecCommand("cp -r " + path.Dir(node.SrcPath) + "/output " + node.SrcPath)
 		ExecCommand("cd " + node.SrcPath + " && ./bin/xchain-cli account newkeys --output data/keys -f")
 		ExecCommand("cd " + node.SrcPath + " && ./bin/xchain-cli netURL gen")
 
