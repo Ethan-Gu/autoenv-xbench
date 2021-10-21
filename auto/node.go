@@ -92,7 +92,6 @@ func (n *Node) OverrideConfig() {
 	xposPath := n.SrcPath + "/data/genesis/xpos.json"
 	n.xposConfig(xposPath)
 
-	
 	// Rename xpos.json as xuper.json && save the old xuper.json as single.json
 	err := os.Rename(n.SrcPath+"/data/genesis/xuper.json", n.SrcPath+"/data/genesis/single.json")
 	checkErr(err)
